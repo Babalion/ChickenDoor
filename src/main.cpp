@@ -1,9 +1,11 @@
 #include <Arduino.h>
 #include "../include/motor.hpp"
+#include "../include/endSwitch.hpp"
 
 void setup() {
   
-  // put your setup code here, to run once:
+  EndSwitch EsUp(...);
+  EndSwitch EsDo(...);
 }
 
 void loop() {
