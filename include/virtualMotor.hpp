@@ -14,5 +14,6 @@ public:
     ~VirtualMotor();
 
     MotorState getState();
+    virtual void attach(byte,byte)=0;
     virtual void command(MotorCommand)=0;
 };

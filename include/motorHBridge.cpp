@@ -1,17 +1,21 @@
 #include "virtualMotor.hpp"
 #include "motorHBridge.hpp"
 
-motorHBridge::motorHBridge(byte pinLeft, byte pinRight) : pinLeft(pinLeft), pinRight(pinRight)
+MotorHBridge::MotorHBridge()
+{}
+
+MotorHBridge::~MotorHBridge()
 {
+}
+
+void MotorHBridge::attach(byte pinL,byte pinR){
+    pinLeft=pinL;
+    pinRight=pinR;
     pinMode(pinLeft, OUTPUT);
     pinMode(pinRight, OUTPUT);
 }
 
-motorHBridge::~motorHBridge()
-{
-}
-
-void motorHBridge::command(MotorCommand cmd)
+void MotorHBridge::command(MotorCommand cmd)
 {
     switch (cmd)
     {

@@ -1,9 +1,13 @@
 #include "endSwitch.hpp"
 
-EndSwitch::EndSwitch(byte pin) : pin(pin)
-{
-    pinMode(pin, INPUT);
+EndSwitch::EndSwitch(){
     debouncer = Bounce();
+}
+
+void EndSwitch::attach(byte _pin)
+{
+    pin=_pin;
+    pinMode(pin, INPUT);
     debouncer.attach(pin);
     debouncer.interval(5); // interval in ms
 }
