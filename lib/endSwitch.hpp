@@ -9,7 +9,6 @@ class EndSwitch
 private:
     //for debouncing
     byte pin = 0;
-    int index = 0;
     Bounce debouncer;
 
 public:
@@ -22,5 +21,5 @@ public:
     //reads state of the endswitch
     //true, if endswitch is triggered
     //false, else
-    bool isTriggered() {}
+    bool isTriggered();
 };

@@ -1,6 +1,6 @@
 #include <Arduino.h>
-#include "../include/motorHBridge.hpp"
-#include "../include/endSwitch.hpp"
+#include "../lib/motorHBridge.hpp"
+#include "../lib/endSwitch.hpp"
 #include <Bounce2.h>
 
 enum DoorPosition
@@ -48,6 +48,7 @@ void setup()
 
 void loop()
 {
+	unsigned long start;
 	updateDoorPos();
 	switch (dPos)
 	{
@@ -58,7 +59,7 @@ void loop()
 			DoorMotor.command(cmdN);
 			break;
 		case isDown:
-			unsigned long start = millis();
+			start = millis();
 			while (dPos == DoorUp && DoorMotor.getState() == isDown && (millis() - start) < 60E3)
 			{
 				updateDoorPos();
@@ -86,7 +87,7 @@ void loop()
 		switch (DoorMotor.getState())
 		{
 		case isUp:
-			unsigned long start = millis();
+			start = millis();
 			while (dPos == DoorMiddle && DoorMotor.getState() == isUp && (millis() - start) < 60E3)
 			{
 				updateDoorPos();
@@ -99,7 +100,7 @@ void loop()
 			}
 			break;
 		case isDown:
-			unsigned long start = millis();
+			start = millis();
 			while (dPos == DoorMiddle && DoorMotor.getState() == isDown && (millis() - start) < 60E3)
 			{
 				updateDoorPos();
@@ -132,7 +133,7 @@ void loop()
 		switch (DoorMotor.getState())
 		{
 		case isUp:
-			unsigned long start = millis();
+			start = millis();
 			while (dPos == DoorDown && DoorMotor.getState() == isUp && (millis() - start) < 60E3)
 			{
 				updateDoorPos();

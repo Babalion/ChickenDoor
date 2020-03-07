@@ -1,5 +1,5 @@
-#include "virtualMotor.hpp"
-#include "motorHBridge.hpp"
+#include "../lib/virtualMotor.hpp"
+#include "../lib/motorHBridge.hpp"
 
 MotorHBridge::MotorHBridge()
 {}

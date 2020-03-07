@@ -1,4 +1,4 @@
-#include "virtualMotor.hpp"
+#include "../lib/virtualMotor.hpp"
 
 VirtualMotor::VirtualMotor()
 {

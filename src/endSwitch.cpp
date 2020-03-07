@@ -1,4 +1,4 @@
-#include "endSwitch.hpp"
+#include "../lib/endSwitch.hpp"
 
 EndSwitch::EndSwitch(){
     debouncer = Bounce();
