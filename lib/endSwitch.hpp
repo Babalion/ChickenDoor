@@ -10,6 +10,7 @@ private:
     //for debouncing
     byte pin = 0;
     Bounce debouncer;
+    bool state;
 
 public:
     EndSwitch();

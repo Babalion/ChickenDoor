@@ -3,6 +3,10 @@
 #include "../lib/endSwitch.hpp"
 #include <Bounce2.h>
 
+EndSwitch EsUp = EndSwitch();
+EndSwitch EsDown = EndSwitch();
+MotorHBridge DoorMotor = MotorHBridge();
+
 enum DoorPosition
 {
 	DoorUp,
@@ -10,11 +14,10 @@ enum DoorPosition
 	DoorMiddle
 };
 
-EndSwitch EsUp = EndSwitch();
-EndSwitch EsDown = EndSwitch();
-MotorHBridge DoorMotor = MotorHBridge();
 DoorPosition dPos;
-void updateDoorPos()
+
+
+inline void updateDoorPos()
 {
 	if (EsUp.isTriggered())
 	{
@@ -35,20 +38,51 @@ Bounce buttonDoorDown = Bounce();
 
 void setup()
 {
-	buttonDoorUp.attach(5);
-	buttonDoorDown.attach(6);
+	buttonDoorUp.attach(4);
+	buttonDoorDown.attach(5);
 	buttonDoorUp.interval(10);
 	buttonDoorDown.interval(10);
 
-	EsUp.attach(1);
-	EsDown.attach(2);
-	DoorMotor.attach(3, 4);
+	EsUp.attach(6);
+	EsDown.attach(7);
+	DoorMotor.attach(8, 9);
 	updateDoorPos();
+	Serial.begin(9600);
+}
+
+void runDoor(bool (*cond)())
+{
+	unsigned long startTime = millis();
+	while (cond() && (millis() - startTime) < 60E3)
+	{
+		Serial.println((millis() - startTime));
+		updateDoorPos();
+		buttonDoorUp.update();
+		buttonDoorDown.update();
+		if (buttonDoorDown.risingEdge() || buttonDoorUp.risingEdge())
+		{
+			DoorMotor.command(cmdN);
+		}
+	}
+	DoorMotor.command(cmdN);
 }
 
 void loop()
 {
-	unsigned long start;
+	unsigned long start = millis();
+	unsigned long tmp = 0;
+	if (start - tmp >= 0)
+	{
+		Serial.print("dPos: ");
+		Serial.print(dPos);
+		Serial.print(" EsUp:");
+		Serial.print(EsUp.isTriggered());
+		Serial.print(" EsDown:");
+		Serial.print(EsDown.isTriggered());
+		Serial.print(" MotorState:");
+		Serial.println(DoorMotor.getState());
+		tmp = start;
+	}
 	updateDoorPos();
 	switch (dPos)
 	{
@@ -59,17 +93,7 @@ void loop()
 			DoorMotor.command(cmdN);
 			break;
 		case isDown:
-			start = millis();
-			while (dPos == DoorUp && DoorMotor.getState() == isDown && (millis() - start) < 60E3)
-			{
-				updateDoorPos();
-				buttonDoorUp.update();
-				buttonDoorDown.update();
-				if (buttonDoorDown.risingEdge() || buttonDoorUp.risingEdge())
-				{
-					DoorMotor.command(cmdN);
-				}
-			}
+			runDoor([](){return (dPos == DoorUp && DoorMotor.getState() == isDown);});
 			break;
 		case isN:
 			buttonDoorDown.update();
@@ -87,30 +111,10 @@ void loop()
 		switch (DoorMotor.getState())
 		{
 		case isUp:
-			start = millis();
-			while (dPos == DoorMiddle && DoorMotor.getState() == isUp && (millis() - start) < 60E3)
-			{
-				updateDoorPos();
-				buttonDoorUp.update();
-				buttonDoorDown.update();
-				if (buttonDoorDown.risingEdge() || buttonDoorUp.risingEdge())
-				{
-					DoorMotor.command(cmdN);
-				}
-			}
+			runDoor([](){return (dPos == DoorMiddle && DoorMotor.getState() == isUp);});
 			break;
 		case isDown:
-			start = millis();
-			while (dPos == DoorMiddle && DoorMotor.getState() == isDown && (millis() - start) < 60E3)
-			{
-				updateDoorPos();
-				buttonDoorUp.update();
-				buttonDoorDown.update();
-				if (buttonDoorDown.risingEdge() || buttonDoorUp.risingEdge())
-				{
-					DoorMotor.command(cmdN);
-				}
-			}
+			runDoor([](){return (dPos == DoorMiddle && DoorMotor.getState() == isDown);});
 			break;
 		case isN:
 			buttonDoorUp.update();
@@ -133,17 +137,7 @@ void loop()
 		switch (DoorMotor.getState())
 		{
 		case isUp:
-			start = millis();
-			while (dPos == DoorDown && DoorMotor.getState() == isUp && (millis() - start) < 60E3)
-			{
-				updateDoorPos();
-				buttonDoorUp.update();
-				buttonDoorDown.update();
-				if (buttonDoorDown.risingEdge() || buttonDoorUp.risingEdge())
-				{
-					DoorMotor.command(cmdN);
-				}
-			}
+			runDoor([](){return (dPos == DoorDown && DoorMotor.getState() == isUp);});
 			break;
 		case isDown:
 			DoorMotor.command(cmdN);

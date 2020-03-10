@@ -1,15 +1,17 @@
 #include "../lib/endSwitch.hpp"
 
-EndSwitch::EndSwitch(){
+EndSwitch::EndSwitch()
+{
     debouncer = Bounce();
 }
 
 void EndSwitch::attach(byte _pin)
 {
-    pin=_pin;
+    pin = _pin;
     pinMode(pin, INPUT);
     debouncer.attach(pin);
     debouncer.interval(5); // interval in ms
+    state = digitalRead(pin);
 }
 
 EndSwitch::~EndSwitch()
@@ -19,12 +21,5 @@ EndSwitch::~EndSwitch()
 bool EndSwitch::isTriggered()
 {
     debouncer.update();
-    if (debouncer.read() == LOW)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
+    return !debouncer.read();
 }

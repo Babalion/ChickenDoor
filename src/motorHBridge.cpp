@@ -13,6 +13,7 @@ void MotorHBridge::attach(byte pinL,byte pinR){
     pinRight=pinR;
     pinMode(pinLeft, OUTPUT);
     pinMode(pinRight, OUTPUT);
+    command(cmdN);
 }
 
 void MotorHBridge::command(MotorCommand cmd)
