@@ -1,11 +1,11 @@
 #include <Arduino.h>
-#include "../lib/motorHBridge.hpp"
+#include "../lib/motorServo.hpp"
 #include "../lib/endSwitch.hpp"
 #include <Bounce2.h>
 
 EndSwitch EsUp = EndSwitch();
 EndSwitch EsDown = EndSwitch();
-MotorHBridge DoorMotor = MotorHBridge();
+MotorServo DoorMotor = MotorServo();
 
 enum DoorPosition
 {
@@ -40,12 +40,12 @@ void setup()
 {
 	buttonDoorUp.attach(4);
 	buttonDoorDown.attach(5);
-	buttonDoorUp.interval(10);
-	buttonDoorDown.interval(10);
+	buttonDoorUp.interval(50);
+	buttonDoorDown.interval(50);
 
 	EsUp.attach(6);
 	EsDown.attach(7);
-	DoorMotor.attach(8, 9);
+	DoorMotor.attach(9,0);
 	updateDoorPos();
 	Serial.begin(9600);
 }
@@ -73,7 +73,7 @@ void loop()
 	unsigned long tmp = 0;
 	if (start - tmp >= 0)
 	{
-		Serial.print("dPos: ");
+		Serial.print(" dPos: ");
 		Serial.print(dPos);
 		Serial.print(" EsUp:");
 		Serial.print(EsUp.isTriggered());
